@@ -1,0 +1,274 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: echo
+  namespace: test
+spec:
+  chart:
+    spec:
+      chart: ./application/
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: GitRepository
+        name: stakater
+  interval: 10m0s
+  values:
+    alertmanagerConfig:
+      enabled: false
+      selectionLabels:
+        alertmanagerConfig: workload
+      spec:
+        inhibitRules: []
+        receivers: []
+        route: null
+    applicationName: echo
+    autoscaling:
+      additionalLabels: null
+      annotations: null
+      enabled: false
+      maxReplicas: 10
+      metrics:
+      - resource:
+          name: cpu
+          target:
+            averageUtilization: 60
+            type: Utilization
+        type: Resource
+      - resource:
+          name: memory
+          target:
+            averageUtilization: 60
+            type: Utilization
+        type: Resource
+      minReplicas: 1
+    certificate:
+      additionalLabels: null
+      annotations: null
+      commonName: admin-app
+      dnsNames: null
+      duration: 8760h0m0s
+      emailSANs: null
+      enabled: false
+      ipAddresses: null
+      isCA: false
+      issuerRef:
+        group: null
+        kind: ClusterIssuer
+        name: ca-issuer
+      keyAlgorithm: rsa
+      keyEncoding: pkcs1
+      keySize: 2048
+      keystores:
+        enabled: false
+        jks:
+          create: false
+          key: test_key
+          name: test-creds
+        pkcs12:
+          create: true
+          key: test_key
+          name: test-creds
+      privateKey:
+        enabled: false
+        rotationPolicy: Always
+      renewBefore: 720h0m0s
+      secretName: tls-cert
+      subject: null
+      uriSANs: null
+      usages: null
+    configMap:
+      additionalLabels: null
+      annotations: null
+      enabled: false
+      files: null
+    cronJob:
+      enabled: false
+      jobs: null
+    deployment:
+      additionalContainers: null
+      additionalLabels: null
+      additionalPodAnnotations: null
+      affinity: null
+      annotations: null
+      args: []
+      command: []
+      dnsConfig: null
+      enabled: true
+      env: null
+      envFrom: null
+      fluentdConfigAnnotations: null
+      hostAliases: null
+      image:
+        pullPolicy: IfNotPresent
+        repository: hashicorp/http-echo
+        tag: latest
+      imagePullSecrets: ""
+      initContainers: null
+      livenessProbe:
+        enabled: true
+        exec: {}
+        failureThreshold: 3
+        httpGet:
+          path: /path
+          port: 5678
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      nodeSelector: null
+      openshiftOAuthProxy:
+        enabled: false
+        port: 8080
+        secretName: openshift-oauth-proxy-tls
+      podLabels: null
+      ports: null
+      readinessProbe:
+        enabled: true
+        exec: {}
+        failureThreshold: 3
+        httpGet:
+          path: /path
+          port: 5678
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      reloadOnChange: true
+      replicas: null
+      resources:
+        limits:
+          cpu: 0.5
+          memory: 256Mi
+        requests:
+          cpu: 0.1
+          memory: 128Mi
+      securityContext: null
+      startupProbe:
+        enabled: false
+        exec: {}
+        failureThreshold: 30
+        httpGet:
+          path: /path
+          port: 5678
+        periodSeconds: 10
+      strategy:
+        type: RollingUpdate
+      tolerations: null
+      volumeMounts: null
+      volumes: null
+    endpointMonitor:
+      additionalLabels: null
+      annotations: null
+      enabled: false
+    externalSecret:
+      enabled: false
+      files: null
+      refreshInterval: 1m
+      secretStore:
+        name: tenant-vault-secret-store
+    forecastle:
+      additionalLabels: null
+      displayName: application
+      enabled: false
+      group: ""
+      icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/stakater-big.png
+      networkRestricted: false
+      properties: null
+    grafanaDashboard:
+      additionalLabels: null
+      annotations: null
+      contents: null
+      enabled: false
+    ingress:
+      additionalLabels: null
+      annotations: null
+      enabled: false
+      hosts:
+      - chart-example.local
+      ingressClassName: ""
+      pathType: ImplementationSpecific
+      servicePort: http
+      tls: null
+    labels:
+      group: com.stakater.platform
+      team: stakater
+    namespaceOverride: test
+    networkPolicy:
+      additionalLabels: null
+      annotations: null
+      egress: null
+      enabled: false
+      ingress: null
+    pdb:
+      enabled: false
+      minAvailable: 1
+    persistence:
+      accessMode: ReadWriteOnce
+      additionalLabels: null
+      annotations: null
+      enabled: false
+      mountPVC: false
+      mountPath: /
+      storageClass: '-'
+      storageSize: 8Gi
+    prometheusRule:
+      additionalLabels: null
+      enabled: false
+      groups: []
+    rbac:
+      enabled: true
+      roles: null
+      serviceAccount:
+        additionalLabels: null
+        annotations: null
+        enabled: false
+        name: ""
+    route:
+      additionalLabels: null
+      annotations: null
+      enabled: false
+      host: null
+      path: null
+      port:
+        targetPort: http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      wildcardPolicy: None
+    sealedSecret:
+      additionalLabels: null
+      annotations: null
+      enabled: false
+      files: null
+    secret:
+      additionalLabels: null
+      annotations: null
+      enabled: false
+      files: null
+    secretProviderClass:
+      enabled: false
+      name: ""
+      objects: null
+      provider: ""
+      roleName: ""
+      secretObjects: null
+      vaultAddress: ""
+    service:
+      additionalLabels: null
+      annotations: null
+      enabled: true
+      ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+        targetPort: 8080
+    serviceMonitor:
+      additionalLabels: null
+      annotations: null
+      enabled: false
+      endpoints:
+      - interval: 5s
+        path: /actuator/prometheus
+        port: http
+
